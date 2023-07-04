@@ -1,0 +1,460 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Zesty Zomato - Food Delivery Management</title>
+    <style>
+        /* ... Your existing CSS styles ... */
+    </style>
+</head>
+<body>
+    <h1>Welcome to Zesty Zomato - Food Delivery Management</h1>
+
+    <h2>Menu</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dish in menu %}
+            <tr>
+                <td>{{ dish.id }}</td>
+                <td>{{ dish.name }}</td>
+                <td>{{ dish.price }}</td>
+                <td>{{ "Yes" if dish.availability else "No" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Place Order</h2>
+    <form action="/place_order" method="POST">
+        <label for="customer_name">Customer Name:</label>
+        <input type="text" id="customer_name" name="customer_name" required>
+        <br><br>
+        <label for="dish_id">Dish IDs:</label>
+        {% for dish in menu %}
+        <label>
+            <input type="checkbox" name="dish_id" value="{{ dish.id }}">
+            {{ dish.name }} - {{ dish.price }} INR
+        </label>
+        {% endfor %}
+        <br><br>
+        <input type="submit" value="Place Order">
+    </form>
+
+    <h2>Orders</h2>
+    <label for="status_filter">Filter by Status:</label>
+    <select id="status_filter" onchange="filterOrders()">
+        <option value="">All</option>
+        <option value="received">Received</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready for pickup">Ready for Pickup</option>
+        <option value="delivered">Delivered</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Dish IDs</th>
+                <th>Status</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody id="order_list">
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>
+                    {% for dish_id in order.dish_ids %}
+                        {% for dish in menu %}
+                            {% if dish.id == dish_id %}
+                                {{ dish.name }}{% if not loop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td>{{ order.status }}</td>
+                <td>{{ calculate_total_price(order.dish_ids) }} INR</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Add Dish</h3>
+    <form action="/add_dish" method="POST">
+        <label for="dish_name">Dish Name:</label>
+        <input type="text" id="dish_name" name="dish_name" required>
+        <br><br>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+        <br><br>
+        <label for="availability">Availability:</label>
+        <input type="checkbox" id="availability" name="availability">
+        <br><br>
+        <input type="submit" value="Add Dish">
+    </form>
+
+    <h3>Remove Dish</h3>
+    <form action="/remove_dish" method="POST">
+        <label for="dish_id">Dish ID:</label>
+        <input type="number" id="dish_id" name="dish_id" required>
+        <br><br>
+        <input type="submit" value="Remove Dish">
+    </form>
+
+    <h3>Update Availability</h3>
+    <form action="/update_availability" method="POST">
+        <label for="dish_id">Dish ID:</label>
+        <input type="number" id="dish_id" name="dish_id" required>
+        <br><br>
+        <label for="availability">Availability:</label>
+        <input type="checkbox" id="availability" name="availability">
+        <br><br>
+        <input type="submit" value="Update Availability">
+    </form>
+
+    <h3>Update Order Status</h3>
+    <form action="/update_status" method="POST">
+        <label for="order_id">Order ID:</label>
+        <input type="number" id="order_id" name="order_id" required>
+        <br><br>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="received">Received</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready for pickup">Ready for Pickup</option>
+            <option value="delivered">Delivered</option>
+        </select>
+        <br><br>
+        <input type="submit" value="Update Status">
+    </form>
+
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+
+    <script>
+        function filterOrders() {
+            const filter = document.getElementById("status_filter").value;
+            const orders = document.getElementById("order_list").getElementsByTagName("tr");
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                const status = order.getElementsByTagName("td")[3].innerText;
+                if (filter === "" || status === filter) {
+                    order.style.display = "table-row";
+                } else {
+                    order.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zesty Zomato - Food Delivery Management</title>
+    <style>
+       
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Specific Styles */
+
+#status_filter {
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.status-received {
+  background-color: #f2b100;
+  color: #fff;
+}
+
+.status-preparing {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.status-ready {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.status-delivered {
+  background-color: #6c757d;
+  color: #fff;
+}
+    </style>
+</head>
+<body>
+    <h1>Welcome to Zesty Zomato - Food Delivery Management</h1>
+
+    <h2>Menu</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dish in menu %}
+            <tr>
+                <td>{{ dish.id }}</td>
+                <td>{{ dish.name }}</td>
+                <td>{{ dish.price }}</td>
+                <td>{{ "Yes" if dish.availability else "No" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Place Order</h2>
+    <form action="/place_order" method="POST">
+        <label for="customer_name">Customer Name:</label>
+        <input type="text" id="customer_name" name="customer_name" required>
+        <br><br>
+        <label for="dish_id">Dish IDs:</label>
+        {% for dish in menu %}
+        <label>
+            <input type="checkbox" name="dish_id" value="{{ dish.id }}">
+            {{ dish.name }} - {{ dish.price }} INR
+        </label>
+        {% endfor %}
+        <br><br>
+        <input type="submit" value="Place Order">
+    </form>
+
+    <h2>Orders</h2>
+    <label for="status_filter">Filter by Status:</label>
+    <select id="status_filter" onchange="filterOrders()">
+        <option value="">All</option>
+        <option value="received">Received</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready for pickup">Ready for Pickup</option>
+        <option value="delivered">Delivered</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Dish IDs</th>
+                <th>Status</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody id="order_list">
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.dish_ids }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ calculate_total_price(order.dish_ids) }} INR</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Add Dish</h3>
+    <form action="/add_dish" method="POST">
+        <label for="dish_name">Dish Name:</label>
+        <input type="text" id="dish_name" name="dish_name" required>
+        <br><br>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+        <br><br>
+        <label for="availability">Availability:</label>
+        <input type="checkbox" id="availability" name="availability">
+        <br><br>
+        <input type="submit" value="Add Dish">
+    </form>
+
+    <h3>Remove Dish</h3>
+    <form action="/remove_dish" method="POST">
+        <label for="dish_id">Dish ID:</label>
+        <input type="number" id="dish_id" name="dish_id" required>
+        <br><br>
+        <input type="submit" value="Remove Dish">
+    </form>
+
+    <h3>Update Availability</h3>
+    <form action="/update_availability" method="POST">
+        <label for="dish_id">Dish ID:</label>
+        <input type="number" id="dish_id" name="dish_id" required>
+        <br><br>
+        <label for="availability">Availability:</label>
+        <input type="checkbox" id="availability" name="availability">
+        <br><br>
+        <input type="submit" value="Update Availability">
+    </form>
+
+    <h3>Update Order Status</h3>
+    <form action="/update_status" method="POST">
+        <label for="order_id">Order ID:</label>
+        <input type="number" id="order_id" name="order_id" required>
+        <br><br>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="received">Received</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready for pickup">Ready for Pickup</option>
+            <option value="delivered">Delivered</option>
+        </select>
+        <br><br>
+        <input type="submit" value="Update Status">
+    </form>
+
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+
+    <script>
+        function filterOrders() {
+            const filter = document.getElementById("status_filter").value;
+            const orders = document.getElementById("order_list").getElementsByTagName("tr");
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                const status = order.getElementsByTagName("td")[3].innerText;
+                if (filter === "" || status === filter) {
+                    order.style.display = "table-row";
+                } else {
+                    order.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
