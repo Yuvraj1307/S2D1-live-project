@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>admin page</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>item</th>
+                <th>status</th>
+                <th>change status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Row 1, Cell 1</td>
+                <td>Row 1, Cell 2</td>
+                <td>Row 1, Cell 3</td>
+            </tr>
+             
+        </tbody>
+    </table>
+</body>
+</html>
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+
+<script>
+    const socket = io('http://localhost:8000',{transports:["wesocket"]});  // Replace with your server's URL
+
+
+async function renderTable(){
+
+  let res = await fetch(`http://localhost:8000`)
+    let data=await res.json()
+console.log(data)
+
+let arr=data.map((el,i)=>{
+    let state=`${el.status}`
+
+    return `
+     
+            <tr>
+                <td>${el.id}</td>
+                <td>${el.item}</td>
+                <td>${el.status}</td>
+                <td   onClick=changeStat(${JSON.stringify(el)})>change</td>
+            </tr>
+           
+    `
+})
+let BDY=document.querySelector("tbody")
+BDY.innerHTML=arr.join(" ")
+
+}
+
+renderTable()
+
+
+async function changeStat(e){
+    // console.log(e)
+    // let det=JSON.parse(e)
+let arr=["Pending","Progress","Completed"]
+let idx=arr.indexOf(e.status)
+if(idx==arr.length-1){
+    idx=0
+}else{
+    idx++
+}
+    let res=await fetch(`http://localhost:8000/orders/${e.id}`,{
+        method:"PUT",
+        headers:{
+            "Content-type":"application/json"
+        },
+        body:JSON.stringify({"status":arr[idx]})
+    })
+    let data=await res.json()
+    // console.log(data)
+    socket.on("order_status_changed",(msg)=>{
+     console.log(msg)
+    })
+}
+</script>

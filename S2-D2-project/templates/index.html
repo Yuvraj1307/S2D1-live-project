@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Real-time Order Status Updates</title>
+  <style>
+    /* Add some basic styling to the page */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    #statusUpdates {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-time Order Status Updates</h1>
+
+  <div id="statusUpdates">
+    <!-- Order status updates will be dynamically added here -->
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+  <script>
+    // Client-side (frontend) code
+
+    const socket = io.connect('http://localhost:5000',{transports:["wesocket"]});  // Replace with your server's URL
+
+    // Handle incoming order status updates
+    socket.on('order_status_update', function (data) {
+      const orderId = data.orderId;
+      const status = data.status;
+
+      // Create a new status update element
+      const statusUpdate = document.createElement('div');
+      statusUpdate.innerHTML = `Order ID: ${orderId}, Status: ${status}`;
+
+      // Add the status update element to the page
+      document.getElementById('statusUpdates').appendChild(statusUpdate);
+    });
+
+    // Emit a custom event to subscribe to order status updates
+    socket.emit('subscribe_to_order_updates', { orderId: 'example_order_id' });  // Replace with the desired order ID
+  </script>
+</body>
+</html>
