@@ -1,0 +1,5 @@
+def rev(str):
+   reverseEd=””
+   for i in range(len(str)-1,-1):
+        reverseEd+=str[i]
+    return reverseEd
