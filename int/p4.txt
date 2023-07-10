@@ -1,3 +1,4 @@
+P$.a:
 def rev(str):
    reverseEd=””
    for i in range(len(str)-1,-1):
