@@ -1,0 +1,79 @@
+## Problem 16:
+## # Prerequisite: Understand creating tables in SQL / collections in MongoDB
+## # Problem: Create a `Restaurants` table / collection with the fields defined above.
+CREATE TABLE Restaurants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    cuisine_type VARCHAR(100),
+    average_rating INT,
+    location VARCHAR(255),
+    delivery_available BOOLEAN
+);
+
+## Problem 17:
+## # Prerequisite: Understand inserting data into SQL tables / MongoDB collections
+## # Problem: Insert five rows / documents into the `Restaurants` table / collection with data of your choice.
+insert into Restaurants (name,cuisine_type, average_rating, location)
+values ("res1","veg",4,"sagar")
+
+insert into Restaurants (name,cuisine_type, average_rating,location,delivery_available)
+values ("res2","veg",3,"damoh",0)
+
+insert into Restaurants (name,cuisine_type, average_rating,location)
+values ("res1","veg",2,"panna")
+
+insert into Restaurants (name,cuisine_type, average_rating, location,delivery_available)
+values ("res1","veg",5,"rewa",1)
+
+insert into Restaurants (name,cuisine_type, average_rating, location,delivery_available)
+values ("res1","veg",0,"satna",1)
+
+
+## Problem 18:
+## # Prerequisite: Understand how to order data in SQL / MongoDB
+## # Problem: Write a query to fetch all restaurants, ordered by `average_rating` in descending order.
+select * from restaurants
+order by average_rating desc;
+
+
+## Problem 19:
+## # Prerequisite: Understand filtering with multiple conditions in SQL / MongoDB
+## # Problem: Write a query to fetch all restaurants that offer `delivery_available` and have an `average_rating` of more than 4.
+select * from restaurants
+where delivery_available = 1 and average_rating > 4;
+
+## Problem 20:
+## # Prerequisite: Understand how to use NULL checks in SQL / MongoDB
+## # Problem: Write a query to fetch all restaurants where the `cuisine_type` field is not set or is null.
+select * from restaurants where cuisine_type is null;
+
+## Problem 21:
+## # Prerequisite: Understand how to count rows / documents in SQL / MongoDB
+## # Problem: Write a query to count the number of restaurants that have `delivery_available`.
+select count(*) from restaurants where delivery_available = 1;
+
+## Problem 22:
+## # Prerequisite: Understand using string patterns in SQL (LIKE clause) / using regex in MongoDB
+## # Problem: Write a query to fetch all restaurants whose `location` contains 'New York'.
+select *
+from restaurants
+where location like "%sagar%"
+
+## Problem 23:
+## # Prerequisite: Understand how to use the AVG function in SQL / MongoDB's aggregate functions
+## # Problem: Write a query to calculate the average `average_rating` of all restaurants.
+select avg(average_rating) from restaurants;
+
+## Problem 24:
+## # Prerequisite: Understand how to limit results in SQL / MongoDB
+## # Problem: Write a query to fetch the top 5 restaurants when ordered by `average_rating` in descending order.
+select * 
+from restaurants
+order by average_rating desc
+limit 3
+
+## Problem 25:
+## # Prerequisite: Understand data deletion in SQL / MongoDB
+## # Problem: Write a query to delete the restaurant with `id` 3.
+delete from restaurants
+where id = 3;
